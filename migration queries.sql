@@ -1,0 +1,45 @@
+--Break Down From Om Sai Transport From 
+
+-- Create a union of trips and client_trips
+INSERT INTO `invoices` (`invoice_number`, `company_id`, `total_amount`, `invoice_date`)
+SELECT
+  CONCAT(YEAR(t.`date`), LPAD(MONTH(t.`date`), 2, '0'), '-', t.`client_id`) AS `invoice_number`,
+  t.`client_id` AS `company_id`,
+  SUM(t.`ftotal`) AS `total_amount`,
+  MAX(t.`invoice_date`) AS `invoice_date`
+FROM
+  (
+    SELECT 
+      `id`, `client_id`, `date`, `lr_no`, `invoice_no`, `source`, `destination`, 
+      `metric_ton`, `vehicle`, `qnt`, `rate`, `other`, `total`, `gst`, `gstval`, 
+      `ftotal`, `bill_status`, `pump_id`, `petrol_amount`, `driver_expence`, 
+      `invoice_date`, `invoice_id`, NULL AS `additional_column1`, NULL AS `additional_column2`
+    FROM `trips`
+    UNION ALL
+    SELECT 
+      `id`, `client_id`, `date`, `lr_no`, `invoice_no`, `source`, `destination`, 
+      `metric_ton`, `vehicle`, `qnt`, `rate`, `other`, `total`, `gst`, `gstval`, 
+      `ftotal`, `bill_status`, `pump_id`, `petrol_amount`, `driver_expence`, 
+      `invoice_date`, `invoice_id`, `additional_column1`, `additional_column2`
+    FROM `client_trips`
+  ) t
+GROUP BY
+  `invoice_number`, `company_id`;
+
+
+
+
+
+-- Update invoice_id in trips table
+UPDATE `trips` t
+JOIN `invoices` i ON CONCAT(YEAR(t.`date`), LPAD(MONTH(t.`date`), 2, '0'), '-', t.`new_company_id`) = i.`invoice_number`
+SET t.`invoice_id` = i.`invoice_number`;
+
+-- Update invoice_id in client_trips table
+UPDATE `client_trips` ct
+JOIN `invoices` i ON CONCAT(YEAR(ct.`date`), LPAD(MONTH(ct.`date`), 2, '0'), '-', ct.`new_company_id`) = i.`invoice_number`
+SET ct.`invoice_id` = i.`invoice_number`;
+
+
+-- Update invoice_id in trips table
+SELECT new_company_id, date, lr_no, source, destination, vehicle, total, ftotal, gst, gstval FROM trips WHERE invoice_id = 202208 UNION ALL -- Select rows from client_trips table SELECT new_company_id, date, lr_no, source, destination, vehicle, total, ftotal, gst, gstval FROM client_trips WHERE invoice_id = 202208;

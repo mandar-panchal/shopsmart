@@ -1,0 +1,61 @@
+{
+  "menu": [
+    {
+      "name": "Dashboard",
+      "badgeClass": "badge badge-light-warning rounded-pill ms-auto me-1",
+      "icon": "home",
+      "url": "/",
+      "slug": "dashboard-ecommerce"
+    
+    },
+    
+
+    {
+      "name": "Patient",
+      "icon": "user",
+      "dropdown": "1",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "patient/index",
+          "name": "Patients",
+          "icon": "circle",
+          "slug": "patient-index"
+        },
+        {
+          "url": "patient/create",
+          "name": "Add Patient",
+          "icon": "circle",
+          "slug": "patient-create"
+        },
+        {
+          "url": "patient/details",
+          "name": "Calling Status",
+          "icon": "circle",
+          "slug": "patient-details"
+        }
+        
+      ]
+    },
+    {
+      "name": "Schedule",
+      "icon": "calendar",
+      "dropdown": "1",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "schedule/index",
+          "name": "Secheduled Calls",
+          "icon": "circle",
+          "slug": "schedule-index"
+        }
+      ]
+    },
+    {
+      "url": "app/calendar",
+      "name": "Calendar",
+      "icon": "calendar",
+      "slug": "app-calendar"
+    }
+  ]
+}
